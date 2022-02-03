@@ -1,8 +1,13 @@
 FROM golang:1.17.3 as build
 
-WORKDIR /var/www/investments-cryptanalysis-parsing
+WORKDIR /var/www/investments-auto-registration-rambler
 
 COPY . .
+
+
+RUN groupadd -g 1000 autoregistration
+RUN useradd -u 1000 -ms /bin/bash -g autoregistration autoregistration
+
 
 # Install system dependencies
 RUN apt-get update && apt-get upgrade -y
@@ -17,5 +22,8 @@ RUN apt-get update \
        gettext-base \
     && rm -rf /var/lib/apt/lists/*
 
+RUN chown -R autoregistration ./
 
+USER autoregistration
 
+RUN go mod download
