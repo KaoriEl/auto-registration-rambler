@@ -27,8 +27,13 @@ func Verify(i structures.AccInfo, rdb *redis.Client) string {
 	}
 
 	FirstStep(ctx, args)
-	SecondStep(ctx)
-	return ThirdStep(b, ctx, args)
+	status := SecondStep(ctx)
+	if status == "all ok" {
+		return ThirdStep(b, ctx, args)
+	} else {
+		return status
+	}
+
 }
 
 func FirstStep(ctx context.Context, args structures.Args) {
@@ -38,13 +43,17 @@ func FirstStep(ctx context.Context, args structures.Args) {
 	}
 }
 
-func SecondStep(ctx context.Context) {
+func SecondStep(ctx context.Context) string {
 	var res string
 	var b []byte
 	if err := chromedp.Run(ctx, tasks.RamblerSecondStep(&res, &b)); err != nil {
 		color.New(color.FgRed).Add(color.Underline).Println(errors.Wrap(err, "Couldn't launch chrome browser"))
 	}
+	if res == "Not found" {
+		return res
+	}
 
+	return "all ok"
 }
 
 func ThirdStep(b []byte, ctx context.Context, args structures.Args) string {

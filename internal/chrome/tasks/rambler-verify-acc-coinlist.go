@@ -9,9 +9,8 @@ import (
 const (
 	// LetLink Find CoinList
 	LetLink                          = `let link = document.querySelectorAll('span');`
-	ConvertToArrayAndFilterByText    = `link = Array.from( link ).filter( e => (/CoinList/i).test( e.textContent ) );`
-	ClickOnTheFirstElementOfTheArray = `link[0].click();`
-	Return                           = `link[0].textContent;`
+	ConvertToArrayAndFilterByText    = `link = Array.from( link ).filter( e => (/Please verify your email address/i).test( e.textContent ) );`
+	ClickOnTheFirstElementOfTheArray = `if (link.length > 0){ link[0].click(); link[0].textContent; }else{ link = "Not found" }`
 
 	// LetLinkHref Get Href verify
 	LetLinkHref                        = `let linkHref = document.querySelectorAll('a');`
@@ -38,7 +37,7 @@ func RamblerSecondStep(res *string, buffer *[]byte) chromedp.Tasks {
 	return chromedp.Tasks{
 		chromedp.WaitVisible(`//*[@id="app"]/div[2]/div[3]/div[2]/div[2]/div[1]/div/div/div[1]/div/div/div/div`),
 		chromedp.Sleep(1 * time.Second),
-		chromedp.Evaluate(LetLink+ConvertToArrayAndFilterByText+ClickOnTheFirstElementOfTheArray+Return, &res),
+		chromedp.Evaluate(LetLink+ConvertToArrayAndFilterByText+ClickOnTheFirstElementOfTheArray, &res),
 	}
 }
 
