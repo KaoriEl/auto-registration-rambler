@@ -1,7 +1,7 @@
 package main
 
-import "fmt"
+import "main/internal/server"
 
 func main() {
-	fmt.Println("123")
+	server.Serve()
 }
