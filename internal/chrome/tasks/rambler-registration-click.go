@@ -35,7 +35,7 @@ func RamblerBaseStep(url string, buffer *[]byte, password string, i structures.A
 	}
 }
 
-func RamblerCaptchaInput(captcha string, res *string) chromedp.Tasks {
+func RamblerCaptchaInput(captcha string, res *string, quality int, buffer *[]byte) chromedp.Tasks {
 	return chromedp.Tasks{
 		chromedp.Sleep(2 * time.Second),
 		chromedp.WaitVisible(`#__next > div > div > div.styles_popup__hP12r > div > div > div > div.styles_leftColumn__GopPD > form > section:nth-child(6) > div > div > div.styles_image__syjy5 > img`),

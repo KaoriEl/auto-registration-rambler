@@ -26,17 +26,16 @@ func Registration(i structures.AccInfo, rdb *redis.Client) {
 	i.Password = GenerateString(20)
 	var count int
 
+	//Подготавливаю инфу для реги.
+	i = Plan(i)
+
+	var b []byte
+
 	var args = structures.Args{
 		I:          i,
 		Prefix:     GenerateString(20),
 		FilePrefix: filePrefix,
 	}
-
-	//Подготавливаю инфу для реги.
-	i = Plan(args.I)
-
-	var b []byte
-
 	BaseStep(b, ctx, args)
 
 	fmt.Println("REDIS_LIST: " + "investments-goroutine" + strconv.Itoa(int(i.ClientId)))
@@ -53,6 +52,7 @@ out:
 	for j := 0; j < 61; j++ {
 		time.Sleep(time.Second)
 		captcha, _ := rdb.LRange("investments-goroutine"+strconv.Itoa(int(i.ClientId)), 0, -1).Result()
+		fmt.Println("len redis: " + string(len(captcha)))
 		if len(captcha) > 0 {
 			break out
 		}
@@ -66,6 +66,7 @@ out:
 	}
 
 	captcha, _ := rdb.LPop("investments-goroutine" + strconv.Itoa(int(i.ClientId))).Result()
+	fmt.Println("LPOP: " + captcha)
 	InputCaptcha(b, captcha, ctx, args, rdb, cancel, count)
 	AccountInfo(b, ctx, args)
 
@@ -85,10 +86,14 @@ func BaseStep(b []byte, ctx context.Context, args structures.Args) {
 
 func InputCaptcha(b []byte, captcha string, ctx context.Context, args structures.Args, rdb *redis.Client, cancel context.CancelFunc, count int) {
 	var res string
-	if err := chromedp.Run(ctx, tasks.RamblerCaptchaInput(captcha, &res)); err != nil {
+	if err := chromedp.Run(ctx, tasks.RamblerCaptchaInput(captcha, &res, 100, &b)); err != nil {
 		color.New(color.FgRed).Add(color.Underline).Println(errors.Wrap(err, "Couldn't launch chrome browser"))
 	}
-
+	//if err := ioutil.WriteFile(args.FilePrefix+"/"+args.Prefix+"-test.jpg", b, 0755); err != nil {
+	//	color.New(color.FgRed).Add(color.Underline).Println(errors.Wrap(err, "Couldn't save screenshot"))
+	//} else {
+	//	color.New(color.FgHiWhite).Add(color.Bold).Println("Complete, save screenshot. Exit func...")
+	//}
 	if res != "" {
 		switch res {
 		case "Неверные символы":
