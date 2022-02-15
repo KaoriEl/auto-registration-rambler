@@ -9,8 +9,9 @@ import (
 	"main/internal/structures"
 )
 
+var rdb = RedisCli()
+
 func Index(v []structures.AccInfo) {
-	rdb := RedisCli()
 	wp := workerpool.New(10)
 	for _, i := range v {
 		r := i
@@ -22,7 +23,6 @@ func Index(v []structures.AccInfo) {
 }
 
 func Verify(v []structures.AccInfo, c chan string) {
-	rdb := RedisCli()
 	wp := workerpool.New(1)
 	for _, i := range v {
 		r := i
