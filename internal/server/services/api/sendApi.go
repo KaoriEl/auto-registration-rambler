@@ -70,6 +70,32 @@ func ChangeStepUser(i structures.AccInfo) {
 		"cid":          strconv.FormatInt(i.ClientId, 10),
 		"current_step": "{\"step_name\":\"AUTOREG-RegCoinlist\",\"params\":[]}",
 		"last_step":    "{\"step_name\":\"AUTOREG_wait_captcha\",\"params\":[]}",
+		"need_msg":     "true",
+	})
+
+	if err != nil {
+		print(err)
+	}
+
+	resp, err := http.Post("http://investments-api-ms-nginx/api/v1/rambler/change/step",
+		"application/x-www-form-urlencoded", bytes.NewBuffer(reqBody))
+	if err != nil {
+		print(err)
+	}
+	defer resp.Body.Close()
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		print(err)
+	}
+	fmt.Println(string(body))
+
+}
+
+func ChangeStepUserWithoutMsg(i structures.AccInfo) {
+	reqBody, err := json.Marshal(map[string]string{
+		"cid":          strconv.FormatInt(i.ClientId, 10),
+		"current_step": "{\"step_name\":\"getMainMenu\",\"params\":[]}",
+		"last_step":    "{\"step_name\":\"getMainMenu\",\"params\":[]}",
 	})
 
 	if err != nil {
@@ -102,6 +128,29 @@ func RegisterPassword(i structures.AccInfo) {
 	}
 
 	resp, err := http.Post("http://investments-api-ms-nginx/api/v1/rambler/register/password",
+		"application/x-www-form-urlencoded", bytes.NewBuffer(reqBody))
+	if err != nil {
+		print(err)
+	}
+	defer resp.Body.Close()
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		print(err)
+	}
+	fmt.Println(string(body))
+
+}
+
+func ChangeStatusMail(i structures.AccInfo) {
+	reqBody, err := json.Marshal(map[string]string{
+		"id":     strconv.FormatInt(i.Id, 10),
+		"status": "GoofierSleep",
+	})
+	if err != nil {
+		print(err)
+	}
+
+	resp, err := http.Post("http://investments-api-ms-nginx/api/v1/rambler/gofier/change/status/mail",
 		"application/x-www-form-urlencoded", bytes.NewBuffer(reqBody))
 	if err != nil {
 		print(err)

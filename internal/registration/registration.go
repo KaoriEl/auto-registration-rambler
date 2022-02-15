@@ -57,8 +57,10 @@ out:
 			break out
 		}
 		if j == 60 {
+			api.ChangeStatusMail(args.I)
+			api.ChangeStepUserWithoutMsg(args.I)
 			cancel()
-			api.CaptchaStatus("Вы не решили капчу за отведенное время, для повторной попытки, нажмите на 'Продать аккаунт Coinlist' в главном меню", i)
+			api.CaptchaStatus("Вы не решили капчу за отведенное время, для повторной попытки, нажмите на 'Пройти KYC по ссылке 💰'", i)
 			return
 		}
 	}
@@ -96,6 +98,8 @@ func InputCaptcha(b []byte, captcha string, ctx context.Context, args structures
 			if count <= 5 {
 				api.SendCaptcha("Вы неправильно ввели капчу, пожалуйста, введите её еще раз.", args.I, args.Prefix)
 			} else {
+				api.ChangeStatusMail(args.I)
+				api.ChangeStepUserWithoutMsg(args.I)
 				cancel()
 				api.CaptchaStatus("Закончились попытки решить капчу, пожалуйста, попробуйте еще раз через 5-10 минут", args.I)
 				return
@@ -110,8 +114,10 @@ func InputCaptcha(b []byte, captcha string, ctx context.Context, args structures
 					break out
 				}
 				if j == 60 {
+					api.ChangeStatusMail(args.I)
+					api.ChangeStepUserWithoutMsg(args.I)
 					cancel()
-					api.CaptchaStatus("Вы не решили капчу за отведенное время, для повторной попытки, нажмите на 'Продать аккаунт Coinlist' в главном меню", args.I)
+					api.CaptchaStatus("Вы не решили капчу за отведенное время, для повторной попытки, нажмите на 'Пройти KYC по ссылке 💰'", args.I)
 					return
 				}
 			}
