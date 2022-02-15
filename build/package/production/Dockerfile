@@ -25,6 +25,8 @@ RUN go build -o /app/registration -v /var/www/investments-auto-registration-ramb
 
 COPY ./configs/.env /app/configs/.env
 
+COPY ./configs/chrome/chrome.json /app/configs/chrome/chrome.json
+
 WORKDIR /app
 
 
