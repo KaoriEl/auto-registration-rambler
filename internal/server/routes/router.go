@@ -22,6 +22,7 @@ func Router(router *mux.Router) {
 
 		//json.NewEncoder(w).Encode(files)
 		v := services.AccInfo(r)
+		fmt.Println(v)
 		go controllers.Index(v)
 
 		defer r.Body.Close()
