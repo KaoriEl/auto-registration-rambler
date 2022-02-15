@@ -10,6 +10,7 @@ Docker build stage:
     - docker:dind
   script:
     - cp ${ENV_STAGE} ./configs/.env
+    - cp ${CHROME_SETTINGS} ./configs/chrome/chrome.json  
     - docker login -u gitlab-ci-token -p ${CI_JOB_TOKEN} ${CI_REGISTRY}
     - echo "Build widgets"
     - docker build -t ${CI_REGISTRY}/${CI_PROJECT_PATH}/${CI_PROJECT_NAME}-registration:stage -f ./build/package/production/Dockerfile .
@@ -40,6 +41,7 @@ Docker build prod:
     - docker:dind
   script:
     - cp ${ENV_PROD} .env
+    - cp ${CHROME_SETTINGS} ./configs/chrome/chrome.json  
     - docker login -u gitlab-ci-token -p ${CI_JOB_TOKEN} ${CI_REGISTRY}
     - echo "Build widgets"
     - docker build -t ${CI_REGISTRY}/${CI_PROJECT_PATH}/${CI_PROJECT_NAME}-registration:prod -f ./build/package/production/Dockerfile .
