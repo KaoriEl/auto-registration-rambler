@@ -159,9 +159,9 @@ func AccountInfo(b []byte, ctx context.Context, args structures.Args) {
 		return
 	}
 
-	api.ChangeStepUser(args.I)
 	api.RegisterPassword(args.I)
 	api.CaptchaStatus("Почта зарегистрирована", args.I)
+    api.ChangeStepUser(args.I)
 
 }
 
