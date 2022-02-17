@@ -1,6 +1,6 @@
 FROM golang:1.17.3 as build
 
-WORKDIR /var/www/investments-cryptanalysis-parsing
+WORKDIR /var/www/investments-auto-registration-rambler
 
 COPY . .
 
@@ -19,14 +19,16 @@ RUN apt-get update \
 
 WORKDIR /app
 
-WORKDIR /var/www/investments-cryptanalysis-parsing
+WORKDIR /var/www/investments-auto-registration-rambler
 
-RUN go build -o /app/widgets -v /var/www/investments-cryptanalysis-parsing/cmd/investments-cryptanalysis-parsing/main.go
+RUN go build -o /app/registration -v /var/www/investments-auto-registration-rambler/cmd/investments-auto-registration-rambler/main.go
 
 COPY ./configs/.env /app/configs/.env
+
+COPY ./configs/chrome/chrome.json /app/configs/chrome/chrome.json
 
 WORKDIR /app
 
 
-CMD ["./widgets"]
+CMD ["./registration"]
 
